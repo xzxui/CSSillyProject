@@ -13,4 +13,4 @@ joker
 6. ModuleProduceFeedbackForStudent Lin Lee
 7. ModuleLLMQuery Harry Jin
 8. ModuleMainLoop (GUI) Fu Joseph
-*9.ModulePDF2b64s Lin Lee*
+ +9.ModulePDF2b64s Lin Lee*
