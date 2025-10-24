@@ -4,3 +4,19 @@ James
 ---
 joker
 20251024
+
+1. ModuleMarkPaper Harry Jin
+
+2. ModuleProduceMarkingReport Harry Jin
+
+3. ModuleFindGrade Harry Jin
+
+4. ModuleSaveMarkingResultToExcel Harry Jin
+
+5. ModuleCreateExcelOfTestingHistory
+
+6. ModuleProduceFeedbackForStudent
+
+7. ModuleLLMQuery
+
+8. MainLoop (GUI)
