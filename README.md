@@ -5,18 +5,12 @@ James
 joker
 20251024
 
-1. ModuleMarkPaper Harry Jin
-
+1. ModuleMarkPaper Fu Joseph
 2. ModuleProduceMarkingReport Harry Jin
-
 3. ModuleFindGrade Harry Jin
-
-4. ModuleSaveMarkingResultToExcel Harry Jin
-
-5. ModuleCreateExcelOfTestingHistory
-
-6. ModuleProduceFeedbackForStudent
-
-7. ModuleLLMQuery
-
-8. MainLoop (GUI)
+4. ModuleSaveMarkingResultToExcel James Li
+5. ModuleCreateExcelOfTestingHistory James Li
+6. ModuleProduceFeedbackForStudent Lin Lee
+7. ModuleLLMQuery Harry Jin
+8. ModuleMainLoop (GUI) Fu Joseph
+*9.ModulePDF2b64s Lin Lee*
