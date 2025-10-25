@@ -38,6 +38,7 @@ def LLMQuery(messages, response_format=None):
         return message.parsed
 
 # For Testing
+# The testing prompt is from platform.openai.com
 """
 result = query(
     [
@@ -45,4 +46,5 @@ result = query(
         {"role": "user", "content": "how can I solve 8x + 7 = -23"},
     ],
 )
+print(result)
 """
