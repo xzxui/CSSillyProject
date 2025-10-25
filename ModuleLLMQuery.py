@@ -6,11 +6,12 @@ client = openai.OpenAI(
         api_key = configs.api_key, 
 )
 
-def LLMQuery(messages, response_format=None):
+def LLMQuery(messages, response_format=None, model=configs.llm_model):
     """
     Args:
-        1. messages (Array): Message history feeded to the LLM, refer to platform.openai.com for details
-        2. response_format (None / Pydantic BaseModel Class): Set this to None if you are not using structured output, otherwise set this to the pydantic BaseModel class you're using
+        1. messages (<class 'list'>): Message history feeded to the LLM, refer to platform.openai.com for details
+        2. response_format (None / Pydantic.BaseModel): Set this to None if you are not using structured output, otherwise set this to the pydantic BaseModel class you're using
+        3. model (<class 'str'>): LLM model used
     Return:
         If you are NOT using strucutred output:
             Return the text response of the AI
@@ -19,12 +20,12 @@ def LLMQuery(messages, response_format=None):
     """
     if response_format == None:
         completion = client.chat.completions.parse(
-            model = configs.llm_model,
+            model = model,
             messages = messages,
         )
     else:
         completion = client.chat.completions.parse(
-            model = configs.llm_model,
+            model = model,
             messages = messages,
             response_format = response_format,
         )

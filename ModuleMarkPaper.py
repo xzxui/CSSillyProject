@@ -3,6 +3,7 @@ import ModulePDF2b64s
 import ModuleProduceMarkingReport
 import ModuleFindGrade
 import ModuleSaveMarkingResultToExcel
+import os
 
 def MarkPaper(student_work_path, mark_scheme_path, threshold_table_path):
     """
@@ -22,7 +23,9 @@ def MarkPaper(student_work_path, mark_scheme_path, threshold_table_path):
     mark_scheme_b64s = ModulePDF2b64s.PDF2b64s(mark_scheme_path)
     threshold_table_b64s = ModulePDF2b64s.PDF2b64s(threshold_table_path)
     syllabus_code, component_num, marking_report, strengths, weaknesses = ModuleProduceMarkingReport.ProduceMarkingReport(completed_question_paper_b64s, mark_scheme_b64s)
-    return (syllabus_code, component_num, marking_report, strengths, weaknesses)
+    grade = ModuleFindGrade.FindGrade(component_num, marking_report, threshold_table_b64s)
+    ModuleSaveMarkingResultToExcel.SaveMarkingResultToExcel(configs.marking_result_folder+os.path.basename(student_work_path), syllabus_code, component_num, marking_report, strengths, weaknesses, grade)
 
 if __name__ == "__main__":
-    MarkPaper("test_folder/data/9709_12_2024_MayJune_Mathematics_qp.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_tt.pdf")
+    print(MarkPaper("test_folder/data/9709_12_2024_MayJune_Mathematics_qp.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_tt.pdf"))
+    print("No fatal error occured. Please go and check the excel file outputted by ModuleSaveMarkingResultToExcel, which should be under {configs.student_work_path}")

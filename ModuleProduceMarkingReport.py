@@ -92,33 +92,6 @@ def generate_image_conversation(b64_imgs, name_of_pdf):
         ])
     return conversation
 
-def concat_b64imgs(b64_imgs):
-    """
-    Args:
-        b64_imgs: List of base 64 image strings
-    Return:
-        base 64 string of VERTICALLY concatenated image
-    """
-    pil_imgs = []
-    for b64_img in b64_imgs:
-        b64_img = b64_img.split(',')[-1] # Remove data URL prefix
-        img_data = base64.b64decode(b64_img)
-        img = Image.open(io.BytesIO(img_data))
-        pil_imgs.append(img)
-    total_height = sum(pil_img.height for pil_img in pil_imgs)
-    max_width = max(pil_img.width for pil_img in pil_imgs)
-    
-    concatenated = Image.new('RGB', (max_width, total_height))
-    y_offset = 0
-    for pil_img in pil_imgs:
-        x_offset = (max_width - pil_img.width) // 2
-        concatenated.paste(img, (x_offset, y_offset))
-        y_offset += pil_img.height
-    
-    buffered = io.BytesIO()
-    concatenated.save(buffered, format=configs.img_extension_cap)
-    return base64.b64encode(buffered.getvalue()).decode()
-
 if __name__ == "__main__":
     import ModulePDF2b64s
     marking_scheme_b64imgs = ModulePDF2b64s.PDF2b64s("test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf")
