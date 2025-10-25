@@ -25,8 +25,10 @@ class MarkingReport(pydantic.BaseModel):
     questions: list[Question] = pydantic.Field(..., description="the list of the marked questions")
     strengths: str = pydantic.Field(..., description="skills that the candiate seems to master")
     weaknesses: str = pydantic.Field(..., description="skills that the candidate seems to lack")
+    custom_error: str = pydantic.Field(..., description="leave empty unless you want to raise a fatal error, the details of which you shall specify here")
 
 def ProduceMarkingReport(student_work_b64imgs, marking_scheme_b64imgs):
+    return("9709", "12", [["1(a)", 45, 6], ["1(b)", 30, 18]], "Too smart a monkey to receive such a score", "Too dumb a human to perform so poor") # for testing
     """
     Args:
         1. student_work_b64imgs: A list of strings(each string being a base 64 image)
@@ -60,6 +62,8 @@ def ProduceMarkingReport(student_work_b64imgs, marking_scheme_b64imgs):
         ],
         response_format=MarkingReport
     )
+    if marking_report.custom_error:
+        raise RuntimeError("The AI raised a fatal error!\n", marking_report.custom_error)
     print(marking_report)
     print(f"They responded in {time()-a}s")
 

@@ -4,6 +4,7 @@ import ModuleLLMQuery
 
 class Grade(pydantic.BaseModel):
     grade_received: str = pydantic.Field(..., min_length=1, max_length=1)
+    custom_error: str = pydantic.Field(..., description="leave empty unless there is a fatal error, the details of which you shall specify here")
 
 def FindGrade(component_number, marking_report, grading_threshold_table_b64imgs):
     """
@@ -12,11 +13,14 @@ def FindGrade(component_number, marking_report, grading_threshold_table_b64imgs)
         2. marking_report (<class 'list'>): a marking report, which is a 3xn (3 rows, n cols) 2D list, where the first column includes quesion numbers, the second column includes Maximum mark possible to be awarded to the question, and the third column includes the marks the student received, e.g. [["3(a)", 10, 9], ["3(b)", 7, 6], ["4", 7, 7]]
         3. grading_threshold_table_b64imgs (<class 'list'>): A list of strings(each string being a base 64 image)
     Return:
-        A grade like 'A', 'B', or 'C'
+        1. of <class 'int'> the total marks earned
+        2. of <class 'int'> the total marks available
+        3. of <class 'str'> the grade like 'A', 'B', or 'C'
     Process:
         Ask the AI to read the grading threshold table for us, and use the marking report and the parsed grading threshold table to determine the grade
     """
     total_raw_marks = calculate_total_score(marking_report)
+    total_marks_there = calculate_total_score(marking_report, cal_total_avail=True)
     grade = ModuleLLMQuery.LLMQuery(
         [
             {"role": "system", "content": "Your job is to look up a table in order to match the score an exam candidate score to their grade. The user will give you a grading threshold table containing information required to do this, as well as the component number of the paper the candidate took and their score received. If the grade the student received passes none of the thresholds in the table, simply award an 'U'"},
@@ -26,7 +30,9 @@ def FindGrade(component_number, marking_report, grading_threshold_table_b64imgs)
         response_format=Grade,
         model="gpt-5-mini",
     )
-    return grade.grade_received
+    if grade.custom_error:
+        raise RuntimeError("The AI raised a fatal error!\n", grade.custom_error)
+    return total_raw_marks, total_marks_there, grade.grade_received
 
 # This is copied from ModuleProduceMarkingReport.py, and it is defined twice instead of imported from one module because they might be modified seperately in futural development
 def generate_image_conversation(b64_imgs, name_of_pdf):
@@ -56,10 +62,13 @@ def generate_image_conversation(b64_imgs, name_of_pdf):
         ])
     return conversation
 
-def calculate_total_score(marking_report):
+def calculate_total_score(marking_report, cal_total_avail=False):
     total_scores = 0
     for question_number, marks_worth, marks_earned in marking_report:
-        total_scores += marks_earned
+        if cal_total_avail:
+            total_scores += marks_worth
+        else:
+            total_scores += marks_earned
     return total_scores
 
 if __name__ == "__main__":

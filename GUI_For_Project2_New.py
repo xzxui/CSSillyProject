@@ -32,67 +32,58 @@ def preview_file_content(file_path: str, max_lines: int = 5) -> str:
 
 
 # Main processing function (integrated new module calls)
-def process_submission(paper_file: str, answer_file: str, progress=gr.Progress()) -> Tuple[str, str, str]:
+def process_submission(paper_file: str, answer_file: str, threshold_file: str, progress=gr.Progress()) -> Tuple[str, str, str]:
     error_msg = ""
 
     # Check if files are fully uploaded
-    if not paper_file or not answer_file:
-        error_msg = "Please upload both exam paper and answer files"
-        return "", "", error_msg
+    if not paper_file or not answer_file or not threshold_file:
+        error_msg = "Please upload both the exam paper, the marking scheme and the grading threshold table"
+        return "", error_msg
 
     # Validate file formats
-    for file_path in [paper_file, answer_file]:
+    for file_path in [paper_file, answer_file, threshold_file]:
         valid, msg = validate_file_format(file_path)
         if not valid:
             error_msg = f"File format validation failed: {msg}"
-            return "", "", error_msg
+            return "", error_msg
 
-    progress(0.2, desc="Starting file processing...")
+    progress(0.05, desc="Starting file processing...")
 
     # Generate file previews
     paper_preview = preview_file_content(paper_file)
     answer_preview = preview_file_content(answer_file)
-    full_preview = (
-        f"[Exam Paper Preview]\n{paper_preview}\n\n"
-        f"[Answer Preview]\n{answer_preview}"
-    )
+    threshold_preview = preview_file_content(threshold_file)
 
-    progress(0.4, desc="Grading in progress...")
+    progress(0.1, desc="Grading in progress...")
 
     try:
-        # Call grading module to get score
-        marking_result = ModuleMarkPaper.MarkPaper(paper_file, answer_file)
-        # Check if grading result contains necessary score information
-        if "score" not in marking_result:
-            raise ValueError("Invalid grading result format - score information missing")
-
-        progress(0.7, desc="Generating feedback...")
+        # Call marking module
+        score, max_score, grade, pros, cons = ModuleMarkPaper.MarkPaper(paper_file, answer_file, threshold_file)
+        progress(0.8, desc="Generating feedback...")
 
         # Call feedback generation module
-        feedback = ModuleProduceFeedbackForStudent.ProduceFeedbackForStudent(
-            paper_file, answer_file, marking_result["score"]
-        )
-        # Ensure feedback is in list format
-        if not isinstance(feedback, list):
-            feedback = [str(feedback)]
+        comment_based_on_history = ModuleProduceFeedbackForStudent.ProduceFeedbackForStudent()
 
     except Exception as e:
         error_msg = f"Processing failed: {str(e)}"
-        return full_preview, "", error_msg
+        return "", error_msg
 
-    progress(0.9, desc="Organizing results...")
+    progress(0.95, desc="Organizing results...")
 
     # Format grading result
     result_str = (
             f"Grading completed!\n"
             f"Exam Paper: {os.path.basename(paper_file)}\n"
             f"Reference Answer: {os.path.basename(answer_file)}\n"
-            f"Score: {marking_result['score']}/100\n"
-            f"Feedback:\n" + "\n".join([f"- {item}" for item in feedback])
+            f"Score: {score}/{max_score}\n"
+            f"Grade: {grade}\n"
+            f"Strengths: {pros}\n"
+            f"Weaknesses: {cons}\n"
+            f"Feedback: {comment_based_on_history}\n"
     )
 
     progress(1.0, desc="Processing completed")
-    return full_preview, result_str, error_msg
+    return result_str, error_msg
 
 
 # Create Gradio interface
@@ -105,28 +96,28 @@ def create_gui():
         with gr.Row():
             # Left input area
             with gr.Column(scale=1):
-                paper_input = gr.File(label="Upload Exam Paper", file_types=[".pdf", ".docx", ".txt"])
-                answer_input = gr.File(label="Upload Reference Answer", file_types=[".pdf", ".docx", ".txt"])
+                paper_input = gr.File(label="Upload Completed Question Paper", file_types=[".pdf"])
+                answer_input = gr.File(label="Upload Marking Scheme", file_types=[".pdf"])
+                threshold_input = gr.File(label="Upload Grading Threshold Table", file_types=[".pdf"])
                 process_btn = gr.Button("Start Processing", variant="primary")
 
             # Right output area
             with gr.Column(scale=2):
-                preview_output = gr.Textbox(label="File Content Preview", lines=10)
                 result_output = gr.Textbox(label="Grading Result", lines=8)
                 error_output = gr.Textbox(label="Error Message", lines=2, interactive=False)
 
         # Bind button event
         process_btn.click(
             fn=process_submission,
-            inputs=[paper_input, answer_input],
-            outputs=[preview_output, result_output, error_output]
+            inputs=[paper_input, answer_input, threshold_input],
+            outputs=[result_output, error_output]
         )
 
         # Instructions
         gr.Markdown("""
         ### Instructions
-        1. Upload the student's exam paper and reference answer files
-        2. Click the "Start Processing" button
+        1. Upload the student's completed question paper, the marking scheme and the grading threshold table
+        2. Click the "Start Processing" button. This should take fewer than 10 minutes.
         3. The system will validate file formats, preview content, and call the grading and feedback generation modules
         4. Results will be displayed in the right area
 
