@@ -22,8 +22,11 @@ def ProduceMarkingReport(student_work_b64imgs, mark_scheme_b64imgs):
         1. student_work_b64imgs: A list of strings(each string being a base 64 image)
         2. mark_scheme_b64imgs: A list of strings(each string being a base 64 image)
     Return:
-        A marking report, which is a 3xn (3 rows, n cols) 2D list, where the first column includes quesion numbers, the second column includes Maximum mark possible to be awarded to the question, and the third column includes the marks the student received, e.g. [["3(a)", 10, 9], ["3(b)", 7, 6], ["4", 7, 7]]
-        A comment 
+        1. Syllabus code (<class 'str'>)
+        2. Component number (<class 'str'>
+        3. A marking report, which is a 3xn (3 rows, n cols) 2D list, where the first column includes quesion numbers, the second column includes Maximum mark possible to be awarded to the question, and the third column includes the marks the student received, e.g. [["3(a)", 10, 9], ["3(b)", 7, 6], ["4", 7, 7]]
+        4. A comment on strengths of the student
+        5. A comment on weaknesses of the student
     Process:
         Call ModuleLLMQuery.LLMQuery to let the AI mark the student's paper
     """
@@ -52,7 +55,7 @@ def ProduceMarkingReport(student_work_b64imgs, mark_scheme_b64imgs):
         response_format=MarkingReport
     )
 
-    marking Report
+    return marking_report.syllabus_code, marking_report.component_number, [[question.question_number, question.max_marks, question.awarded_marks] for question in marking_report.questions], marking_report.strengths, marking_report.weaknesses
 
 def concat_b64imgs(b64_imgs):
     """
