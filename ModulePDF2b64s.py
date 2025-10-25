@@ -27,7 +27,7 @@ def PDF2b64s(pdf_path):
 
 # For testing
 if __name__ == "__main__":
-    b64_imgs = PDF2b64s("test_folder/ModulePDF2b64s/original.pdf")
-    with open("test_folder/ModulePDF2b64s/last_page.png", "wb") as f:
+    b64_imgs = PDF2b64s("test_folder/original.pdf")
+    with open("test_folder/last_page.png", "wb") as f:
         f.write(base64.b64decode(b64_imgs[-1]))
 
