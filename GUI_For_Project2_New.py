@@ -61,7 +61,7 @@ def process_submission(paper_file: str, answer_file: str, progress=gr.Progress()
 
     try:
         # Call grading module to get score
-        marking_result = MarkPaper.MarkPaper(paper_file, answer_file)
+        marking_result = ModuleMarkPaper.MarkPaper(paper_file, answer_file)
         # Check if grading result contains necessary score information
         if "score" not in marking_result:
             raise ValueError("Invalid grading result format - score information missing")
@@ -69,7 +69,7 @@ def process_submission(paper_file: str, answer_file: str, progress=gr.Progress()
         progress(0.7, desc="Generating feedback...")
 
         # Call feedback generation module
-        feedback = ProduceFeedbackForStudent.ProduceFeedbackForStudent(
+        feedback = ModuleProduceFeedbackForStudent.ProduceFeedbackForStudent(
             paper_file, answer_file, marking_result["score"]
         )
         # Ensure feedback is in list format

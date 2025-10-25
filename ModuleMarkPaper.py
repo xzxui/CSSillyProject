@@ -1,8 +1,8 @@
 import configs
-from ModulePDF2b64s import PDF2b64s
-from ModuleProduceMarkingReport import ProduceMarkingReport
-from ModuleFindGrade import FindGrade
-from ModuleSaveMarkingResultToExcel import SaveMarkingResultToExcel
+import ModulePDF2b64s
+import ModuleProduceMarkingReport
+import ModuleFindGrade
+import ModuleSaveMarkingResultToExcel
 
 def MarkPaper(student_work_path, mark_scheme_path, threshold_table_path):
     """
@@ -18,4 +18,11 @@ def MarkPaper(student_work_path, mark_scheme_path, threshold_table_path):
             3. Call ModuleFindGrade.FindGrade
             4. Call ModuleSaveMarkingResultToExcel.SaveMarkingResultToExcel
     """
-    pass
+    completed_question_paper_b64s = ModulePDF2b64s.PDF2b64s(student_work_path)
+    mark_scheme_b64s = ModulePDF2b64s.PDF2b64s(mark_scheme_path)
+    threshold_table_b64s = ModulePDF2b64s.PDF2b64s(threshold_table_path)
+    syllabus_code, component_num, marking_report, strengths, weaknesses = ModuleProduceMarkingReport.ProduceMarkingReport(completed_question_paper_b64s, mark_scheme_b64s)
+    return (syllabus_code, component_num, marking_report, strengths, weaknesses)
+
+if __name__ == "__main__":
+    MarkPaper("test_folder/data/9709_12_2024_MayJune_Mathematics_qp.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_tt.pdf")
