@@ -24,12 +24,21 @@ def MarkPaper(student_work_path, mark_scheme_path, threshold_table_path):
             3. Call ModuleFindGrade.FindGrade
             4. Call ModuleSaveMarkingResultToExcel.SaveMarkingResultToExcel
     """
+    # Convert to base 64 images
     completed_question_paper_b64s = ModulePDF2b64s.PDF2b64s(student_work_path)
     mark_scheme_b64s = ModulePDF2b64s.PDF2b64s(mark_scheme_path)
     threshold_table_b64s = ModulePDF2b64s.PDF2b64s(threshold_table_path)
+
+    # Mark the Paper
     syllabus_code, component_num, marking_report, strengths, weaknesses = ModuleProduceMarkingReport.ProduceMarkingReport(completed_question_paper_b64s, mark_scheme_b64s)
+    print("Marking done, grading now.")
+    # Grade the Paper
     marks_earned, marks_there, grade = ModuleFindGrade.FindGrade(component_num, marking_report, threshold_table_b64s)
-    ModuleSaveMarkingResultToExcel.SaveMarkingResultToExcel(os.path.splitext(configs.marking_result_folder+os.path.basename(student_work_path))[0]+".xlsx", syllabus_code, component_num, marking_report, strengths, weaknesses, marks_earned, grade)
+    print("Grading done, saving now.")
+    # Save the Result
+    ModuleSaveMarkingResultToExcel.SaveMarkingResultToExcel(os.path.splitext(configs.marking_result_folder+os.path.basename(student_work_path))[0]+".xlsx", syllabus_code, component_num, marking_report, strengths, weaknesses, marks_earned, marks_there, grade)
+    print("Saving done!")
+
     return marks_earned, marks_there, grade, strengths, weaknesses
 
 if __name__ == "__main__":
