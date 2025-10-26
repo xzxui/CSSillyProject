@@ -1,5 +1,6 @@
 import configs
 import pandas as pd
+import ModuleCreateExcelOfTestingHistory
 
 def SaveMarkingResultToExcel(save_path:str, syllabus_code:str, component_number:str, marking_report:list, strengths:str, weaknesses:str, score:int, grade:str):
     """
@@ -27,9 +28,9 @@ def SaveMarkingResultToExcel(save_path:str, syllabus_code:str, component_number:
     with pd.ExcelWriter(save_path, engine='openpyxl') as writer:
         df_sheet.to_excel(writer, sheet_name='Marking Report', index=False) #Saving to excel, with disabled default index column
     
-    from ModuleCreateExcelOfTestingHistory import CreateExcelOfTestingHistory
-    CreateExcelOfTestingHistory() #updating testing history excel file
+    ModuleCreateExcelOfTestingHistory.CreateExcelOfTestingHistory() #updating testing history excel file
 
-    #print("Marking result saved to " + save_path, ".") Idk if needed
-    pass
-#testcode: SaveMarkingResultToExcel('test_folder\\1.xlsx','syllabus', 'component' ,  [['1', 5, 4], ['2(a)', 10, 4], ['2(b)(i)', 5,4], ['2(b)(ii)',5,5]] , 'good', 'bad',114,514)
+    print("Marking result saved to " + save_path, ".")
+
+if __name__ == "__main__":
+    testcode: SaveMarkingResultToExcel('test_folder/1.xlsx','syllabus', 'component' ,  [['1', 5, 4], ['2(a)', 10, 4], ['2(b)(i)', 5,4], ['2(b)(ii)',5,5]] , 'good', 'bad',114,514)
