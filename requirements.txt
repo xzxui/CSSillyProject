@@ -1,0 +1,8 @@
+openpyxl
+pydantic
+base64
+pillow
+pymupdf
+openai
+gradio
+pathlib
