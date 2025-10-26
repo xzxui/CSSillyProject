@@ -1,5 +1,5 @@
 base_url = "https://aihubmix.com/v1"
-api_key = "sk-krp4JkozuxCJoPZe5f12E459D3A545709a4433521f6a9c45" # If you steal our API key you are not a good person. Too lazy I am to conceal these
+api_key = "sk-krp4JkozuxCJoPZe5f12E459D3A545709a4433521f6a9c45" 
 llm_model = "gpt-5"
 marking_result_folder = "./history/"
 path_to_excel_of_testing_history = "./summary/testing_history.xlsx"
