@@ -1,6 +1,7 @@
 import configs
 import pydantic
 import ModuleLLMQuery
+import time
 
 class Grade(pydantic.BaseModel):
     grade_received: str = pydantic.Field(..., min_length=1, max_length=1)
@@ -21,6 +22,8 @@ def FindGrade(component_number, marking_report, grading_threshold_table_b64imgs)
     """
     total_raw_marks = calculate_total_score(marking_report)
     total_marks_there = calculate_total_score(marking_report, cal_total_avail=True)
+    print("Sending request to AI for finding grade")
+    before = time.time()
     grade = ModuleLLMQuery.LLMQuery(
         [
             {"role": "system", "content": "Your job is to look up a table in order to match the score an exam candidate score to their grade. The user will give you a grading threshold table containing information required to do this, as well as the component number of the paper the candidate took and their score received. If the grade the student received passes none of the thresholds in the table, simply award an 'U'"},
@@ -30,6 +33,7 @@ def FindGrade(component_number, marking_report, grading_threshold_table_b64imgs)
         response_format=Grade,
         model="gpt-5-mini",
     )
+    print(f"The AI responded in {time.time()-before}s")
     if grade.custom_error:
         raise RuntimeError("The AI raised a fatal error!\n", grade.custom_error)
     return total_raw_marks, total_marks_there, grade.grade_received

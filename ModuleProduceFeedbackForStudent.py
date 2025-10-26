@@ -2,6 +2,7 @@ import configs
 import pydantic
 import openpyxl
 import json
+import time
 
 class Comment(pydantic.BaseModel):
     detailed_comment_on_student_performance: str
@@ -37,7 +38,10 @@ def ProduceFeedbackForStudent():
     Process:
         use the information stored in an excel file containing the history of tests that the student has taken to ask an AI to give comment
     """
+    print("Fetching history")
     history_in_json = history_to_json()
+    print("Done fetching, now asking AI to give comments")
+    before = time.time()
     comment = LLMQuery(
         [
             {"role": "system", "content": "You are a responsible and experienced teacher who is giving comments on a student's recent performance on exam papers done for practice, and are here to provide a detailed summary of the student's strengths and areas for improvements."},
@@ -46,8 +50,10 @@ def ProduceFeedbackForStudent():
         response_format=Comment,
         model="gpt-5-mini"
     )
+    print(f"AI responded, took {time.time()-before}s")
     if comment.custom_error:
         raise RuntimeError(f"The AI raised an error: {comment.custom_error}")
+    print("Comment Produced!")
     return comment.detailed_comment_on_student_performance
 
 if __name__ == "__main__":

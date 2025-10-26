@@ -25,9 +25,11 @@ def MarkPaper(student_work_path, mark_scheme_path, threshold_table_path):
             4. Call ModuleSaveMarkingResultToExcel.SaveMarkingResultToExcel
     """
     # Convert to base 64 images
+    print("Converting to base 64.")
     completed_question_paper_b64s = ModulePDF2b64s.PDF2b64s(student_work_path)
     mark_scheme_b64s = ModulePDF2b64s.PDF2b64s(mark_scheme_path)
     threshold_table_b64s = ModulePDF2b64s.PDF2b64s(threshold_table_path)
+    print("Converting done, marking now.")
 
     # Mark the Paper
     syllabus_code, component_num, marking_report, strengths, weaknesses = ModuleProduceMarkingReport.ProduceMarkingReport(completed_question_paper_b64s, mark_scheme_b64s)
@@ -42,6 +44,7 @@ def MarkPaper(student_work_path, mark_scheme_path, threshold_table_path):
     return marks_earned, marks_there, grade, strengths, weaknesses
 
 if __name__ == "__main__":
+    score, score_there, grade, positive, negative = MarkPaper("test_folder/data/9709_12_2024_MayJune_Mathematics_qp.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_tt.pdf")
     score, score_there, grade, positive, negative = MarkPaper("test_folder/data/9709_12_2024_MayJune_Mathematics_qp.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_tt.pdf")
     print(
         f"Total Score: \t{score}\n"

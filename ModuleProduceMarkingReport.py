@@ -46,7 +46,7 @@ def ProduceMarkingReport(student_work_b64imgs, marking_scheme_b64imgs):
     #with open("test_folder/tmp.png", "wb") as f:
     #    f.write(base64.b64decode(marking_scheme_b64imgs[-1]))
     #exit()
-    print("Sending request")
+    print("Sending request to AI for marking, THIS MAY TAKE A WHILE")
     marking_report = ModuleLLMQuery.LLMQuery(
         [
             {"role": "system", "content": "You are an experienced A-Level examiner. You are marking the exam paper of a candidate. You will follow the instructions of the marking scheme when marking the exam paper. The user is your co-worker, and will provide you with the exam paper and the marking scheme."},
@@ -65,7 +65,7 @@ def ProduceMarkingReport(student_work_b64imgs, marking_scheme_b64imgs):
     if marking_report.custom_error:
         raise RuntimeError("The AI raised a fatal error!\n", marking_report.custom_error)
     print(marking_report)
-    print(f"They responded in {time()-a}s")
+    print(f"The AI responded, and it took {time()-a}s")
 
     return marking_report.syllabus_code, marking_report.component_number, [[question.question_number, question.max_marks, question.awarded_marks] for question in marking_report.questions], marking_report.strengths, marking_report.weaknesses
 

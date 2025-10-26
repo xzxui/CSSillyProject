@@ -16,16 +16,18 @@ def CreateExcelOfTestingHistory():
 
     xlsx_files = Path(configs.marking_result_folder).glob('*.xlsx')
 
-    rows = []
+    rows = [[]]
     for file_path in xlsx_files:
-        print(f"Handling: {file_path}")
+        print(f"Reading: {file_path}")
         new, first = DetermineRowsToAdd(file_path)
         rows.append(new)
     rows[0] = first
-    ws.append(rows)
+    for row in rows:
+        ws.append(row)
+    print(f"Added a total of {len(rows)} rows")
 
     wb.save(configs.path_to_excel_of_testing_history)
-    print("Excel of testing history saved")
+    print(f"Excel of testing history saved to {configs.path_to_excel_of_testing_history}")
 
 def DetermineRowsToAdd(path_to_excel, start_col=9, end_col=15):
     wb_obj = openpyxl.load_workbook(path_to_excel)
@@ -33,8 +35,8 @@ def DetermineRowsToAdd(path_to_excel, start_col=9, end_col=15):
     new_row = []
     override_row = []
     for col in range(start_col, end_col+1):
-        new_row.append(rowsheet_obj.cell(row=2, col=col))
-        override_row.append(rowsheet_obj.cell(row=1, col=col))
+        new_row.append(sheet_obj.cell(row=2, column=col).value)
+        override_row.append(sheet_obj.cell(row=1, column=col).value)
     return new_row, override_row
 
 if __name__ == "__main__":

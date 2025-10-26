@@ -47,10 +47,10 @@ def SaveMarkingResultToExcel(save_path:str, syllabus_code:str, component_number:
         ws["C"+str(row)] = mark
         row += 1
     wb.save(save_path)
+    print("Marking result saved to " + save_path, ".")
     
     ModuleCreateExcelOfTestingHistory.CreateExcelOfTestingHistory() #updating testing history excel file
 
-    print("Marking result saved to " + save_path, ".")
 
 if __name__ == "__main__":
     testcode: SaveMarkingResultToExcel('test_folder/marking_result_saved.xlsx','0917', '13' ,  [['1', 5, 4], ['2(a)', 10, 4], ['2(b)(i)', 5,4], ['2(b)(ii)',5,5]] , 'Good at algebra', 'Not good at geometry', 114, 200, 'C')
