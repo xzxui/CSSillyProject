@@ -2,7 +2,7 @@ import configs
 import ModuleCreateExcelOfTestingHistory
 import openpyxl
 
-def SaveMarkingResultToExcel(save_path:str, syllabus_code:str, component_number:str, marking_report:list, strengths:str, weaknesses:str, score:int, total_score_avail, grade:str):
+def SaveMarkingResultToExcel(save_path:str, syllabus_code:str, component_number:str, marking_report:list, strengths:str, weaknesses:str, score:int, total_score_avail, grade:str, update_summary=True):
     """
     Args:
         1. save_path (<class 'str'>): the path of the excel file to save to
@@ -14,6 +14,7 @@ def SaveMarkingResultToExcel(save_path:str, syllabus_code:str, component_number:
         7. score (<class 'int'>)
         8. total_score_avail (<class 'int'>)
         9. grade (<class 'str'>): the grade received, e.g. A, B, C, D, E, U
+        10. update_summary (<class 'bool'>): whether to update the excel of testing history
     Return: No return
     Process:
         Save the marking result into an excel file, and call ModuleCreateExcelOfTestingHistory.CreateExcelOfTestingHistory
@@ -59,4 +60,51 @@ def SaveMarkingResultToExcel(save_path:str, syllabus_code:str, component_number:
 
 
 if __name__ == "__main__":
-    SaveMarkingResultToExcel('test_folder/marking_result_saved.xlsx','0917', '13' ,  [['1', 5, 4], ['2(a)', 10, 4], ['2(b)(i)', 5,4], ['2(b)(ii)',5,5]] , 'Good at algebra', 'Not good at geometry', 114, 200, 'C')
+    SaveMarkingResultToExcel(
+        'test_folder/ModuleSaveMarkingResultToExcel/marking_result_21.xlsx','0917',
+        '21' ,
+        [
+            ['1', 5, 4],
+            ['2(a)', 10, 4],
+            ['2(b)(i)', 5, 4],
+            ['2(b)(ii)', 5, 5]
+        ] ,
+        'Good at algebra',
+        'Not good at geometry',
+        17,
+        25,
+        'B',
+        update_summary=False,
+    )
+    SaveMarkingResultToExcel(
+        'test_folder/ModuleSaveMarkingResultToExcel/marking_result_22.xlsx','0917',
+        '22' ,
+        [
+            ['1', 5, 4],
+            ['2(a)', 15, 4],
+            ['2(b)', 10, 8],
+            ['3', 7, 5]
+        ] ,
+        'Good at calculating the right answer',
+        'Not good at showing the work',
+        37,
+        21,
+        'C',
+        update_summary=False,
+    )
+    SaveMarkingResultToExcel(
+        'test_folder/ModuleSaveMarkingResultToExcel/marking_result_23.xlsx','0917',
+        '23' ,
+        [
+            ['1', 5, 4],
+            ['2', 11, 4],
+            ['3(a)', 5, 4],
+            ['3(b)', 7, 5]
+        ] ,
+        'Good at solving problems quickly',
+        'Not good at handwritting',
+        28,
+        17,
+        'B',
+        update_summary=False,
+    )

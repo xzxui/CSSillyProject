@@ -2,7 +2,7 @@ import configs
 import gradio as gr
 import os
 from pathlib import Path
-from typing import Tuple, Dict, List  # 保留原有的类型导入
+from typing import Tuple, Dict, List
 # Import required modules
 import ModuleMarkPaper
 import ModuleProduceFeedbackForStudent

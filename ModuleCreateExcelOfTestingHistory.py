@@ -2,10 +2,11 @@ import configs
 import openpyxl
 from pathlib import Path
 
-def CreateExcelOfTestingHistory():
+def CreateExcelOfTestingHistory(marking_result_folder_override=None, output_override=None):
     """
     Args:
-        No arguments
+        1. marking_result_folder_override: optional argument of type string, pretty much explains itself
+        2. output_override: optional argument of type string, pretty much explains itself
     Return:
         No return
     Process:
@@ -16,10 +17,12 @@ def CreateExcelOfTestingHistory():
     ws = wb.active
 
     # Find all the marking results
-    xlsx_files = Path(configs.marking_result_folder).glob('*.xlsx')
+    marking_result_folder = marking_result_folder_override or configs.marking_result_folder
+    xlsx_files = Path(marking_result_folder).glob('*.xlsx')
 
     # Add all the information needed into the excel of testing history
     rows = [[]]
+    # first = [] it is not declared outside because this way when the variable is not created by the iteration, a fatal error occurs in our favor
     for file_path in xlsx_files:
         print(f"Reading: {file_path}")
         new, first = DetermineRowsToAdd(file_path)
@@ -31,8 +34,8 @@ def CreateExcelOfTestingHistory():
     print(f"Added a total of {len(rows)} rows")
 
     # Save the excel
-    wb.save(configs.path_to_excel_of_testing_history)
-    print(f"Excel of testing history saved to {configs.path_to_excel_of_testing_history}")
+    wb.save(output_override or configs.path_to_excel_of_testing_history)
+    print(f"Excel of testing history saved to {output_override or configs.path_to_excel_of_testing_history}")
 
 def DetermineRowsToAdd(path_to_excel, start_col=9, end_col=15):
     # Load the marking result
@@ -43,7 +46,17 @@ def DetermineRowsToAdd(path_to_excel, start_col=9, end_col=15):
     for col in range(start_col, end_col+1):
         new_row.append(sheet_obj.cell(row=2, column=col).value)
         override_row.append(sheet_obj.cell(row=1, column=col).value)
+    print(new_row, override_row)
     return new_row, override_row
 
+# For testing
 if __name__ == "__main__":
-    CreateExcelOfTestingHistory()
+    CreateExcelOfTestingHistory(
+        marking_result_folder_override="test_folder/ModuleCreateExcelOfTestingHistory/history1/",
+        output_override="test_folder/ModuleCreateExcelOfTestingHistory/excel_of_testing_history1.xlsx"
+    )
+    CreateExcelOfTestingHistory(
+        marking_result_folder_override="test_folder/ModuleCreateExcelOfTestingHistory/history2/",
+        output_override="test_folder/ModuleCreateExcelOfTestingHistory/excel_of_testing_history2.xlsx"
+    )
+    print("Check test_folder/ModuleCreateExcelOfTestingHistory/excel_of_testing_history.xlsx for the output")

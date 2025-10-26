@@ -9,9 +9,9 @@ class Comment(pydantic.BaseModel):
     detailed_comment_on_student_performance: str
     custom_error: str = pydantic.Field(..., description="explanation for any fatal error you want to raise. unless a fatal error is what you want to raise, leave this field empty")
 
-def history_to_json():
+def history_to_json(p2e):
     # Read history excel file
-    path_to_history = configs.path_to_excel_of_testing_history
+    path_to_history = p2e
     wb_obj = openpyxl.load_workbook(path_to_history)
     sheet_obj = wb_obj.active
     # Find all the names of the columns
@@ -43,18 +43,19 @@ def history_to_json():
             break
         row += 1
     # Return with json's dumps, making it AI-readable
-    return json.dumps(dicts)
+    return json.dumps(dicts, indent=4)
 
-def ProduceFeedbackForStudent():
+def ProduceFeedbackForStudent(p2e=configs.path_to_excel_of_testing_history):
     """
-    Args: Nothing
+    Args:
+        1. p2e: of <class 'str'>
     Return:
         of <class 'str'>, a summary of a student's performance
     Process:
         use the information stored in an excel file containing the history of tests that the student has taken to ask an AI to give comment
     """
     print("Fetching history")
-    history_in_json = history_to_json()
+    history_in_json = history_to_json(p2e)
     print("Done fetching, now asking AI to give comments")
     before = time.time()
     comment = ModuleLLMQuery.LLMQuery(
@@ -73,4 +74,7 @@ def ProduceFeedbackForStudent():
     return comment.detailed_comment_on_student_performance
 
 if __name__ == "__main__":
-    print(ProduceFeedbackForStudent())
+    with open("test_folder/ModuleProduceFeedbackForStudent/comment1.txt", 'w') as f:
+        f.write(ProduceFeedbackForStudent(p2e="test_folder/ModuleProduceFeedbackForStudent/excel_of_testing_history1.xlsx"))
+    with open("test_folder/ModuleProduceFeedbackForStudent/comment2.txt", 'w') as f:
+        f.write(ProduceFeedbackForStudent(p2e="test_folder/ModuleProduceFeedbackForStudent/excel_of_testing_history2.xlsx"))

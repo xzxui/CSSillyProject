@@ -1,6 +1,5 @@
 openpyxl
 pydantic
-base64
 pillow
 pymupdf
 openai

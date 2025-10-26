@@ -1,6 +1,7 @@
 base_url = "https://aihubmix.com/v1"
 api_key = "sk-krp4JkozuxCJoPZe5f12E459D3A545709a4433521f6a9c45" 
 llm_model = "gpt-5"
+#llm_model = "o4-mini"
 marking_result_folder = "./history/"
 path_to_excel_of_testing_history = "./summary/testing_history.xlsx"
 img_extension = "png"

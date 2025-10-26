@@ -1,0 +1,30 @@
+Summary of performance
+- The student shows clear strengths: good algebra skills, ability to calculate correct answers, and speed in solving problems. These are valuable exam strengths — accuracy and fluency allow the student to attempt many questions.
+
+Data issues to note (please clarify)
+- Two records contain impossible scores (37/21 and 28/17) where the Total Marks Attained exceeds the Maximum Total Marks Available. One record is entirely empty. I have prepared the feedback below assuming the qualitative strengths/weaknesses are correct, but please provide corrected numeric scores so I can give more precise grade-target advice.
+
+Strengths (from the papers)
+- Algebra: strong, which suggests comfort with manipulation, symbolic work and routine methods.
+- Correctness: the student often arrives at the right answer — a sign of good conceptual understanding.
+- Speed: solves problems quickly, which is useful in timed exams and means less time pressure.
+
+Main areas for improvement (from the papers)
+- Geometry: explicitly noted as a weakness. This often costs marks because diagram-reading, construction, and reasoning require different habits than algebra.
+- Showing working: the student loses marks when steps or reasoning are not shown, even if the final answer is correct.
+- Handwriting/presentation: poor legibility can cause loss of marks or make examiners unable to award method marks.
+
+Practical, prioritized actions to improve marks
+1) Show full method every time: train to write each step clearly and label intermediate results. Practice will turn this into a habit so full working is written even when you’re confident of the answer.
+2) Improve presentation and handwriting: spend 5–10 minutes per study session copying neatly written model solutions. In timed practice papers, slow down slightly to make working legible — examiners award method marks based on what they can read.
+3) Targeted geometry practice: focus on key geometry topics (angles, circle theorems, triangle properties, coordinate geometry). For each topic, practise 10-15 varied problems and always draw clear, labelled diagrams. Write the reason for each geometric step (e.g., “angles in a semicircle = 90°”, “alternate angles equal”).
+4) Use past papers with examiner mark schemes: practise under timed conditions and then mark against the scheme. Pay special attention to where method marks are given — mimic that structure in your answers.
+5) Slow down on presentation, not on thinking: because you are quick and usually correct, keep that advantage but allocate the last 5–8 minutes per paper to tidy up and ensure methods are shown and handwriting is legible.
+6) Peer or teacher review: have a teacher or peer check one paper each week focusing only on clarity of working and legibility. Small targeted feedback here translates into marks gained.
+
+Concrete short-term targets (next 4 weeks)
+- Convert speed + correctness into higher marks by ensuring method is shown on every question: aim to reduce lost method marks by 50% in four timed papers.
+- Improve one weaker geometry topic per week and complete 10 focused problems with full working and diagrams.
+- Improve handwriting legibility so that all steps are readable by doing 10-minute neat-writing drills three times a week.
+
+If you can: please resend corrected numeric scores (so I can reconcile the impossible totals) and, if available, a sample page showing typical working/handwriting. With that I will give a tailored study plan mapping topics to specific past-paper questions and expected mark gains.
