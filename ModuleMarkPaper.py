@@ -29,7 +29,7 @@ def MarkPaper(student_work_path, mark_scheme_path, threshold_table_path):
     threshold_table_b64s = ModulePDF2b64s.PDF2b64s(threshold_table_path)
     syllabus_code, component_num, marking_report, strengths, weaknesses = ModuleProduceMarkingReport.ProduceMarkingReport(completed_question_paper_b64s, mark_scheme_b64s)
     marks_earned, marks_there, grade = ModuleFindGrade.FindGrade(component_num, marking_report, threshold_table_b64s)
-    ModuleSaveMarkingResultToExcel.SaveMarkingResultToExcel(configs.marking_result_folder+os.path.basename(student_work_path), syllabus_code, component_num, marking_report, strengths, weaknesses, grade)
+    ModuleSaveMarkingResultToExcel.SaveMarkingResultToExcel(os.path.splitext(configs.marking_result_folder+os.path.basename(student_work_path))[0]+".xlsx", syllabus_code, component_num, marking_report, strengths, weaknesses, marks_earned, grade)
     return marks_earned, marks_there, grade, strengths, weaknesses
 
 if __name__ == "__main__":
