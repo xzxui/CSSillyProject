@@ -1,6 +1,6 @@
 import configs
 
-def SaveMarkingResultToExcel(save_path, syllabus_code, component_number, marking_report, strengths, weaknesses, grade):
+def SaveMarkingResultToExcel(save_path, syllabus_code, component_number, marking_report, strengths, weaknesses, score, grade):
     """
     Args:
         1. save_path (<class 'str'>): the path of the excel file to save to
