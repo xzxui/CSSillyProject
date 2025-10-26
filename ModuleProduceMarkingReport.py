@@ -28,7 +28,13 @@ class MarkingReport(pydantic.BaseModel):
     custom_error: str = pydantic.Field(..., description="leave empty unless you want to raise a fatal error, the details of which you shall specify here")
 
 def ProduceMarkingReport(student_work_b64imgs, marking_scheme_b64imgs):
-    return("9709", "12", [["1(a)", 45, 6], ["1(b)", 30, 18]], "Too smart a monkey to receive such a score", "Too dumb a human to perform so poor") # for testing
+    # Only for testing
+    import random
+    a=random.randint(1, 10)
+    aa=random.randint(1, a)
+    b=random.randint(1, 10)
+    ba=random.randint(1, b)
+    return("9709", "12", [["1(a)", a, aa], ["1(b)", b, ba]], "Too smart a monkey to receive such a score", "Too dumb a human to perform so poor") # for testing
     """
     Args:
         1. student_work_b64imgs: A list of strings(each string being a base 64 image)

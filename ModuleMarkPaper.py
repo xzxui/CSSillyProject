@@ -44,7 +44,7 @@ def MarkPaper(student_work_path, mark_scheme_path, threshold_table_path):
     return marks_earned, marks_there, grade, strengths, weaknesses
 
 if __name__ == "__main__":
-    score, score_there, grade, positive, negative = MarkPaper("test_folder/data/9709_12_2024_MayJune_Mathematics_qp.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_tt.pdf")
+    score, score_there, grade, positive, negative = MarkPaper("test_folder/data/9709_12_2024_MayJune_Mathematics_qp_with_less_answers.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_tt.pdf")
     score, score_there, grade, positive, negative = MarkPaper("test_folder/data/9709_12_2024_MayJune_Mathematics_qp.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf", "test_folder/data/9709_12_2024_MayJune_Mathematics_tt.pdf")
     print(
         f"Total Score: \t{score}\n"

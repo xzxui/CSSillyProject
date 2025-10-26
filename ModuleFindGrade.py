@@ -22,6 +22,7 @@ def FindGrade(component_number, marking_report, grading_threshold_table_b64imgs)
     """
     total_raw_marks = calculate_total_score(marking_report)
     total_marks_there = calculate_total_score(marking_report, cal_total_avail=True)
+    #print(total_marks_there)
     print("Sending request to AI for finding grade")
     before = time.time()
     grade = ModuleLLMQuery.LLMQuery(

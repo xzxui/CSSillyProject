@@ -3,6 +3,7 @@ import pydantic
 import openpyxl
 import json
 import time
+import ModuleLLMQuery
 
 class Comment(pydantic.BaseModel):
     detailed_comment_on_student_performance: str
@@ -24,7 +25,7 @@ def history_to_json(right_most_col=7):
             value = sheet_obj.cell(row=row, column=col).value
             if value:
                 all_empty = False
-            dicts[-1][keys[col]] = sheet_obj.cell(row=row, column=col).value
+            dicts[-1][keys[col-1]] = sheet_obj.cell(row=row, column=col).value
         if all_empty:
             break
         row += 1
@@ -42,7 +43,7 @@ def ProduceFeedbackForStudent():
     history_in_json = history_to_json()
     print("Done fetching, now asking AI to give comments")
     before = time.time()
-    comment = LLMQuery(
+    comment = ModuleLLMQuery.LLMQuery(
         [
             {"role": "system", "content": "You are a responsible and experienced teacher who is giving comments on a student's recent performance on exam papers done for practice, and are here to provide a detailed summary of the student's strengths and areas for improvements."},
             {"role": "user", "content": "Provided is the recent performance of the student on practice exam papers, in the format of json:"+history_in_json}
