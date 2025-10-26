@@ -8,7 +8,7 @@ class Comment(pydantic.BaseModel):
     custom_error: str = pydantic.Field(..., description="explanation for any fatal error you want to raise. unless a fatal error is what you want to raise, leave this field empty")
 
 def history_to_json(right_most_col=7):
-    path_to_history = Path(configs.path_to_excel_of_testing_history)
+    path_to_history = configs.path_to_excel_of_testing_history
     wb_obj = openpyxl.load_workbook(path_to_history)
     sheet_obj = wb_obj.active
     keys = []
@@ -24,7 +24,8 @@ def history_to_json(right_most_col=7):
             if value:
                 all_empty = False
             dicts[-1][keys[col]] = sheet_obj.cell(row=row, column=col).value
-        break if all_empty
+        if all_empty:
+            break
         row += 1
     return json.dumps(dicts)
 
