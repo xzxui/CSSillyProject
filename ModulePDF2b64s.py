@@ -16,8 +16,8 @@ def PDF2b64s(pdf_path):
     
     for page_num in range(len(doc)):
         page = doc.load_page(page_num)
-        # 设置较高的分辨率以获得更好的OCR效果
-        mat = pymupdf.Matrix(2.0, 2.0)  # 2倍缩放
+        # set to better resolution for better OCR by AI
+        mat = pymupdf.Matrix(2.0, 2.0)  # scaling by factor of 2
         pix = page.get_pixmap(matrix=mat)
         img_data = pix.tobytes(configs.img_extension)
         b64_imgs.append(base64.b64encode(img_data).decode('utf-8'))

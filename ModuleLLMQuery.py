@@ -19,18 +19,20 @@ def LLMQuery(messages, response_format=None, model=configs.llm_model):
             Return the returned pydantic BaseModel instance from the AI
     """
     if response_format == None:
+        # Regular Response
         completion = client.chat.completions.parse(
             model = model,
             messages = messages,
         )
     else:
+        # Structured Output
         completion = client.chat.completions.parse(
             model = model,
             messages = messages,
             response_format = response_format,
         )
     message = completion.choices[0].message
-    if message.refusal:
+    if message.refusal: # Handle Edge Cases
         print(message)
         raise RuntimeError("Shit! Our llm request refused!")
     if response_format == None:
@@ -38,14 +40,11 @@ def LLMQuery(messages, response_format=None, model=configs.llm_model):
     else:
         return message.parsed
 
-# For Testing
-# The testing prompt is from platform.openai.com
-"""
-result = query(
-    [
-        {"role": "system", "content": "You are a helpful math tutor. Guide the user through the solution step by step."},
-        {"role": "user", "content": "how can I solve 8x + 7 = -23"},
-    ],
-)
-print(result)
-"""
+if __name__ == "__main__":
+    result = LLMQuery(
+        [
+            {"role": "system", "content": "You are a helpful math tutor. Guide the user through the solution step by step."},
+            {"role": "user", "content": "how can I solve 8x + 7 = -23"},
+        ],
+    )
+    print(result)

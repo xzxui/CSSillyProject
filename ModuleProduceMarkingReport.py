@@ -7,8 +7,12 @@ from time import time
 
 import ModuleLLMQuery
 
+# This class is only for prompt engineering purpose,
+# and the data stored in an instance of this class
+# is not returned by this module in any way
 class GradingPoint(pydantic.BaseModel):
     grading_point_type: str = pydantic.Field(..., description="the type of this grading point, which is usually the character/string before the number, e.g. the type of B1 is just B")
+    # This is a disabled feature because it's too time consuming
     #guidance: str = pydantic.Field(..., description="the guidance given by the marking scheme for this grading point")
     marks_worth: int = pydantic.Field(..., description="the number of marks this grading point is worth. For example, a B2 is worth 2 marks while an M1 is worth 1")
     marks_earned: int = pydantic.Field(..., description="the number of marks the candidate earned")
@@ -29,12 +33,14 @@ class MarkingReport(pydantic.BaseModel):
 
 def ProduceMarkingReport(student_work_b64imgs, marking_scheme_b64imgs):
     # Only for testing
+    """
     import random
     a=random.randint(1, 10)
     aa=random.randint(1, a)
     b=random.randint(1, 10)
     ba=random.randint(1, b)
     return("9709", "12", [["1(a)", a, aa], ["1(b)", b, ba]], "Too smart a monkey to receive such a score", "Too dumb a human to perform so poor") # for testing
+    """
     """
     Args:
         1. student_work_b64imgs: A list of strings(each string being a base 64 image)
@@ -68,6 +74,7 @@ def ProduceMarkingReport(student_work_b64imgs, marking_scheme_b64imgs):
         ],
         response_format=MarkingReport
     )
+    # Allow the AI to handle edge cases
     if marking_report.custom_error:
         raise RuntimeError("The AI raised a fatal error!\n", marking_report.custom_error)
     print(marking_report)
@@ -76,6 +83,7 @@ def ProduceMarkingReport(student_work_b64imgs, marking_scheme_b64imgs):
     return marking_report.syllabus_code, marking_report.component_number, [[question.question_number, question.max_marks, question.awarded_marks] for question in marking_report.questions], marking_report.strengths, marking_report.weaknesses
 
 def generate_image_conversation(b64_imgs, name_of_pdf):
+    # Generate 'messages' in order to let the AI see all the pages in the right ORDER
     conversation = []
     idx = 0
     for b64_img in b64_imgs:
@@ -101,24 +109,4 @@ def generate_image_conversation(b64_imgs, name_of_pdf):
             }
         ])
     return conversation
-
-if __name__ == "__main__":
-    import ModulePDF2b64s
-    marking_scheme_b64imgs = ModulePDF2b64s.PDF2b64s("test_folder/data/9709_12_2024_MayJune_Mathematics_ms.pdf")
-    a=time()
-    print("Request sent.")
-    marking_report = ModuleLLMQuery.LLMQuery(
-        [
-            {"role": "system", "content": "The user will give you a marking scheme in pdf, and you must tell the user the marking scheme for question 8(a) and 8(b) in details."},
-            {"role": "user", "content": [
-                {
-                    "type": "text",
-                    "text": "Here is the marking scheme."
-                },
-            ]},
-            *generate_image_conversation(marking_scheme_b64imgs, "the marking scheme"),
-        ],
-    )
-    print(marking_report)
-    print(f"They responded in {time()-a}s")
 

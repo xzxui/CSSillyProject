@@ -9,13 +9,26 @@ class Comment(pydantic.BaseModel):
     detailed_comment_on_student_performance: str
     custom_error: str = pydantic.Field(..., description="explanation for any fatal error you want to raise. unless a fatal error is what you want to raise, leave this field empty")
 
-def history_to_json(right_most_col=7):
+def history_to_json():
+    # Read history excel file
     path_to_history = configs.path_to_excel_of_testing_history
     wb_obj = openpyxl.load_workbook(path_to_history)
     sheet_obj = wb_obj.active
+    # Find all the names of the columns
     keys = []
-    for col in range(1, right_most_col+1):
-        keys.append(sheet_obj.cell(row=1, column=col).value)
+    right_most_col = 0
+    col = 1
+    while True:
+        val = sheet_obj.cell(row=1, column=col).value
+        if val:
+            keys.append(val)
+        else:
+            break
+        right_most_col += 1
+        col += 1
+    # Find all the values under each column, generating a 'dicts'
+    # 'dicts' could look like the following example
+    # dicts = [{"col1":11, "col2":21}, {"col1":12, "col2":22}]
     dicts = []
     row = 2
     while True:
@@ -29,6 +42,7 @@ def history_to_json(right_most_col=7):
         if all_empty:
             break
         row += 1
+    # Return with json's dumps, making it AI-readable
     return json.dumps(dicts)
 
 def ProduceFeedbackForStudent():
@@ -52,6 +66,7 @@ def ProduceFeedbackForStudent():
         model="gpt-5-mini"
     )
     print(f"AI responded, took {time.time()-before}s")
+    # Allowing the AI to determine edge cases
     if comment.custom_error:
         raise RuntimeError(f"The AI raised an error: {comment.custom_error}")
     print("Comment Produced!")

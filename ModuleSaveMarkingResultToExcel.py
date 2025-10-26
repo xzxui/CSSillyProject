@@ -20,7 +20,8 @@ def SaveMarkingResultToExcel(save_path:str, syllabus_code:str, component_number:
     """
     wb = openpyxl.Workbook()
     ws = wb.active
-    
+
+    # Fill in the first row and some of the second columns
     ws["A1"] = "Question Number"
     ws["B1"] = "Maximum Mark Possible"
     ws["C1"] = "Marks Received"
@@ -40,17 +41,22 @@ def SaveMarkingResultToExcel(save_path:str, syllabus_code:str, component_number:
     ws["O1"] = "Grade Achieved"
     ws["O2"] = grade
 
+    # Fill in the rest
     row = 2
     for question_num, max_mark, mark in marking_report:
         ws["A"+str(row)] = question_num
         ws["B"+str(row)] = max_mark
         ws["C"+str(row)] = mark
         row += 1
+
+    # Save
     wb.save(save_path)
     print("Marking result saved to " + save_path, ".")
-    
-    ModuleCreateExcelOfTestingHistory.CreateExcelOfTestingHistory() #updating testing history excel file
+
+    # Update excel of testing history
+    print("Updating the excel file of testing history")
+    ModuleCreateExcelOfTestingHistory.CreateExcelOfTestingHistory()
 
 
 if __name__ == "__main__":
-    testcode: SaveMarkingResultToExcel('test_folder/marking_result_saved.xlsx','0917', '13' ,  [['1', 5, 4], ['2(a)', 10, 4], ['2(b)(i)', 5,4], ['2(b)(ii)',5,5]] , 'Good at algebra', 'Not good at geometry', 114, 200, 'C')
+    SaveMarkingResultToExcel('test_folder/marking_result_saved.xlsx','0917', '13' ,  [['1', 5, 4], ['2(a)', 10, 4], ['2(b)(i)', 5,4], ['2(b)(ii)',5,5]] , 'Good at algebra', 'Not good at geometry', 114, 200, 'C')

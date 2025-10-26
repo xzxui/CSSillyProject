@@ -20,9 +20,9 @@ def FindGrade(component_number, marking_report, grading_threshold_table_b64imgs)
     Process:
         Ask the AI to read the grading threshold table for us, and use the marking report and the parsed grading threshold table to determine the grade
     """
+    # Calculate Scores
     total_raw_marks = calculate_total_score(marking_report)
     total_marks_there = calculate_total_score(marking_report, cal_total_avail=True)
-    #print(total_marks_there)
     print("Sending request to AI for finding grade")
     before = time.time()
     grade = ModuleLLMQuery.LLMQuery(
@@ -35,6 +35,7 @@ def FindGrade(component_number, marking_report, grading_threshold_table_b64imgs)
         model="gpt-5-mini",
     )
     print(f"The AI responded in {time.time()-before}s")
+    # Let the AI raise error for edge cases
     if grade.custom_error:
         raise RuntimeError("The AI raised a fatal error!\n", grade.custom_error)
     return total_raw_marks, total_marks_there, grade.grade_received
@@ -76,6 +77,7 @@ def calculate_total_score(marking_report, cal_total_avail=False):
             total_scores += marks_earned
     return total_scores
 
+# For Testing
 if __name__ == "__main__":
     import ModuleProduceMarkingReport, ModulePDF2b64s, time
     def calculate_correct_grade(total_score, thresholds):
