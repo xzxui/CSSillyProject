@@ -26,4 +26,4 @@ def SaveMarkingResultToExcel(save_path, syllabus_code, component_number, marking
     with pd.ExcelWriter(save_path, engine='openpyxl') as writer:
         df_sheet.to_excel(writer, sheet_name='Marking Report', index=False)
     pass
-#test: SaveMarkingResultToExcel('test_folder\\1.xlsx','syllabus', 'component' ,  [['1', 5, 4], ['2(a)', 10, 4], ['2(b)(i)', 5,4], ['2(b)(ii)',5,5]] , 'good', 'bad',114,514)
+#testcode: SaveMarkingResultToExcel('test_folder\\1.xlsx','syllabus', 'component' ,  [['1', 5, 4], ['2(a)', 10, 4], ['2(b)(i)', 5,4], ['2(b)(ii)',5,5]] , 'good', 'bad',114,514)
