@@ -41,10 +41,27 @@ def LLMQuery(messages, response_format=None, model=configs.llm_model):
         return message.parsed
 
 if __name__ == "__main__":
+    import pydantic
     result = LLMQuery(
         [
             {"role": "system", "content": "You are a helpful math tutor. Guide the user through the solution step by step."},
             {"role": "user", "content": "how can I solve 8x + 7 = -23"},
         ],
+        model="gpt-5-mini",
     )
     print(result)
+    class Response(pydantic.Basemodel):
+        solution: str
+        answer: str
+    result = LLMQuery(
+        [
+            {"role": "system", "content": "You are a helpful math tutor. Guide the user through the solution step by step."},
+            {"role": "user", "content": "how can I solve 8x + 7 = -23"},
+        ],
+        response_format=Response,
+        model="gpt-5-mini",
+    )
+    print(
+            f"Solution: \t{result.solution}"
+            f"Answer: \t{result.answer}"
+    )
