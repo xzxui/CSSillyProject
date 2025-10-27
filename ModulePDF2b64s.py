@@ -28,12 +28,24 @@ def PDF2b64s(pdf_path):
 # For testing
 if __name__ == "__main__":
     print("Converting")
-    b64_imgs = PDF2b64s("test_folder/ModulePDF2b64s/original.pdf")
+    b64_imgs = PDF2b64s("test_folder/ModulePDF2b64s/original1.pdf")
     print("Done converting")
-    with open("test_folder/ModulePDF2b64s/last_page.png", "wb") as f:
+    with open("test_folder/ModulePDF2b64s/last_page2.png", "wb") as f:
         f.write(base64.b64decode(b64_imgs[-1]))
     print("Last page saved")
-    with open("test_folder/ModulePDF2b64s/first_page.png", "wb") as f:
+    with open("test_folder/ModulePDF2b64s/first_page2.png", "wb") as f:
         f.write(base64.b64decode(b64_imgs[0]))
-    print("First page saved")
+    print("First page saved\n")
+    
+    print("Converting")
+    b64_imgs = PDF2b64s("test_folder/ModulePDF2b64s/original2.pdf")
+    print("Done converting")
+    with open("test_folder/ModulePDF2b64s/last_page2.png", "wb") as f:
+        f.write(base64.b64decode(b64_imgs[-1]))
+    print("Last page saved")
+    with open("test_folder/ModulePDF2b64s/first_page2.png", "wb") as f:
+        f.write(base64.b64decode(b64_imgs[0]))
+    print("First page saved\n")
+
+    print(b64_imgs[-1])
 
